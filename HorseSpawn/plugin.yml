@@ -1,0 +1,7 @@
+main: com.MobSpawn.custom.HorseSpawn
+version: 1.0
+name: HorseSpawn
+commands:
+     horse:
+        description: spawns a horse only you can ride
+        usage: /<command>
