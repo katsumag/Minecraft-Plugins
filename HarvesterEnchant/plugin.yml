@@ -1,0 +1,7 @@
+main: com.CFE.custom.MainEnchants
+version: 1.0
+name: FarmEnchants
+commands:
+     Harvester:
+        description: Spawns an Enchantment Book with the Harvester enchantment on.
+        usage: /<command>
