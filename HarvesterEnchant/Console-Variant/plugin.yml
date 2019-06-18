@@ -1,0 +1,24 @@
+main: io.github.katsumag.EventsPlugin.general.Main
+version: 1.0
+author: katsumag
+name: EventsPlugin
+permissions:
+    events.admin.host:
+        description: Allows you to start and end Events
+        default: false
+    events.player.join:
+        description: Allows players to join Events
+        default: true
+    events.admin.kick:
+        description: Allows you to kick players from events
+        default: false
+    events.admin.setlobby:
+        description: Allows you to set the lobby of an event
+        default: false
+        
+commands:
+    Event:
+        description: The main event command. /event join to join an event
+        ailiases: [Events, Event]
+        usage: /<command>
+    
