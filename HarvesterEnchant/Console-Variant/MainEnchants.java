@@ -128,6 +128,7 @@ public class MainEnchants extends JavaPlugin implements Listener{
 				if (!(item.getItemMeta() == null)) {
 				if (!(item.getItemMeta().getDisplayName() == null)) {
 				if (item.getItemMeta().getDisplayName().toString().endsWith("Harvester I")) {
+					if (!(clicked.getItemMeta().hasEnchant(ench))) {
 					ItemMeta cm = clicked.getItemMeta();
 					List<String> lore = clicked.getLore();
 					if (!(lore == null)) {
@@ -135,6 +136,7 @@ public class MainEnchants extends JavaPlugin implements Listener{
 					cm.setLore(Arrays.asList(lore + "Harvester I"));
 					clicked.setItemMeta(cm);
 					e.setCursor(null);
+					
 		} else {
 			cm.addEnchant(ench, 1, true);
 			cm.setLore(Arrays.asList("Harvester I"));
@@ -144,6 +146,7 @@ public class MainEnchants extends JavaPlugin implements Listener{
 			e.setCursor(null);
 		}
 				}
+	}
 	}
 	}
 	}
