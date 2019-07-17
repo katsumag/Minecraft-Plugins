@@ -1,14 +1,20 @@
 package com.MobSpawn.custom;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftAbstractHorse;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftHorse;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -23,6 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
@@ -30,6 +37,11 @@ import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
+
+import net.minecraft.server.v1_12_R1.EntityHorse;
+import net.minecraft.server.v1_12_R1.EntityHorseAbstract;
+import net.minecraft.server.v1_12_R1.GenericAttributes;
 
 public class HorseSpawn extends JavaPlugin implements Listener{
 
@@ -46,14 +58,12 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 		logger.info(pdfFile.getName() + " has been disabled! ");
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		Player player = (Player) sender;
 		if (sender instanceof Player) {
 			String lowercmd = cmd.getName().toLowerCase();
 			switch(lowercmd) {
-			
 			case "horse":
 				try {
 					List<Entity> count = player.getWorld().getLivingEntities().stream().filter(d -> d instanceof Horse && player == ((Horse)d).getOwner()).collect(Collectors.toList());
@@ -72,26 +82,41 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					//exception.printStackTrace();
 				}
 				if (args.length == 0) {
+				if (spaceCheck(player) == true) {
 				Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 				h.setTamed(true);
 				h.setOwner(player);
 				h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
 				h.setAdult();
+				EntityHorse horse = ((CraftHorse) h).getHandle();
+				horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 				nameHorse(player, h);
+				} else {
+				}
 				} else {
 				if (args.length >= 1) {
 				if (args[0].equals("black")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
-					h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+					h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 45));
 					h.setAdult();
 					h.setStyle(Style.NONE);
 					h.setColor(Color.BLACK);
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameHorse(player, h);
 					return true;
+					}
+				
 				}
 				if (args[0].equals("brown")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -99,10 +124,16 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setAdult();
 					h.setStyle(Style.NONE);
 					h.setColor(Color.BROWN);
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameHorse(player, h);
 					return true;
+					}
 				}
 				if (args[0].equals("chestnut")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -110,10 +141,17 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setAdult();
 					h.setStyle(Style.NONE);
 					h.setColor(Color.CHESTNUT);
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameHorse(player, h);
+					h.addScoreboardTag("Chestnut");
 					return true;
+					}
 				}
 				if (args[0].equals("cream")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -121,10 +159,16 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setAdult();
 					h.setStyle(Style.NONE);
 					h.setColor(Color.CREAMY);
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameHorse(player, h);
 					return true;
+					}
 			    }
 				if (args[0].equals("darkBrown")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -132,10 +176,16 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setAdult();
 					h.setStyle(Style.NONE);
 					h.setColor(Color.DARK_BROWN);
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameHorse(player, h);
 					return true;
+					}
 				}
 				if (args[0].equals("grey")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -143,10 +193,16 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setAdult();
 					h.setStyle(Style.NONE);
 					h.setColor(Color.GRAY);
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameHorse(player, h);
 					return true;
+					}
 				}
 				if (args[0].equals("white")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -154,11 +210,17 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setAdult();
 					h.setStyle(Style.NONE);
 					h.setColor(Color.WHITE);
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameHorse(player, h);
 					return true;
+					}
 				}
 				
 				if (args[0].equals("ChI")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -167,11 +229,17 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setStyle(Style.NONE);
 					h.setColor(Color.CHESTNUT);
 					h.getInventory().setArmor(new ItemStack(Material.IRON_BARDING));
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.2);
 					nameHorse(player, h);
 					return true;
+					}
 				}
 				
 				if (args[0].equals("GrayD")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -180,31 +248,49 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setStyle(Style.NONE);
 					h.setColor(Color.GRAY);
 					h.getInventory().setArmor(new ItemStack(Material.DIAMOND_BARDING));
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameHorse(player, h);
 					return true;
+					}
 				}
 				
 				if (args[0].equals("Skeleton")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					AbstractHorse h = (AbstractHorse) player.getWorld().spawnEntity(player.getLocation(), EntityType.SKELETON_HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
 					h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
 					h.setAdult();
+					EntityHorseAbstract horse = ((CraftAbstractHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameCustomHorse(player, h);
 					return true;
+					}
 				}
 				
 				if (args[0].equals("Zombie")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					AbstractHorse h = (AbstractHorse) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE_HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
 					h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
 					h.setAdult();
+					EntityHorseAbstract horse = ((CraftAbstractHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameCustomHorse(player, h);
 					return true;
+					}
 				}
 				
 				if (args[0].equals("CustomWhite")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -213,20 +299,18 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setStyle(Style.NONE);
 					h.setColor(Color.WHITE);
 					h.getInventory().setArmor(new ItemStack(Material.GOLD_BARDING));
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.42);
 					nameHorse(player, h);
-					final Runnable effectStart = new Runnable() {
-						public void run() {
-							if (!(h.isDead())) {
-							h.getWorld().playEffect(h.getLocation(), Effect.FIREWORKS_SPARK, null);
-						}
-						}
-					};
-					
-					player.getServer().getScheduler().scheduleAsyncRepeatingTask(this, effectStart, 20, 1);
-
+					h.addScoreboardTag("CustomWhite");
+					return true;
+					}
 				}
 				
 				if (args[0].equals("CustomBlack")) {
+					if (spaceCheck(player) == false) {
+						break;
+					} else {
 					Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
 					h.setTamed(true);
 					h.setOwner(player);
@@ -234,18 +318,12 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					h.setAdult();
 					h.setStyle(Style.NONE);
 					h.setColor(Color.BLACK);
+					EntityHorse horse = ((CraftHorse) h).getHandle();
+					horse.getAttributeInstance(GenericAttributes.h).setValue(1.32);
 					nameHorse(player, h);
-					final Runnable effectStart = new Runnable() {
-						public void run(){
-							if (!(h.isDead())) {
-								h.getWorld().playEffect(h.getLocation(), Effect.FLAME, null);
-							}
-						}
-					};
-					
-					player.getServer().getScheduler().scheduleAsyncRepeatingTask(this, effectStart, 20, 1);
-					
+					h.addScoreboardTag("CustomBlack");					
 					return true;
+					}
 				}
 				
 			}
@@ -255,6 +333,52 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 		return true;
 			
 	}
+	public boolean tf = true;
+	public boolean spaceCheck(Player player) {
+		tf = true;
+		List<Block> done = new ArrayList<>();
+		List<Block> list = GetBlocksInCube(player.getLocation(), 2, 0, 2);
+		list.forEach(block -> {
+			done.add(block);
+			done.add(block.getLocation().add(new Vector(0, 1, 0)).getBlock());
+		});
+		done.forEach(block -> {
+			if (block.getType() != Material.AIR) {
+				tf = false;
+			}
+		});
+		return tf;
+	}
+	
+	public static List<Block> GetBlocksInCube(Location middle, int _x, int _y, int _z) {
+        List<Block> selectedBlocks = new ArrayList<>();
+
+        Location iterator = middle.clone();
+        iterator.subtract(new Vector(_x, _y, _z));
+        Location reset_point = iterator.clone();
+
+        // LoopSize
+        int loopsizeX = _x * 2 + 1,
+            loopsizeY = _y * 2 + 1,
+            loopsizeZ = _z * 2 + 1;
+
+        for ( int x = 0; x < loopsizeX; x++ ) {
+            iterator.setX(reset_point.getX() + x );
+            for ( int y = 0; y < loopsizeY; y++ ) {
+                iterator.setY(reset_point.getY() + y );
+                for ( int z = 0; z < loopsizeZ; z++ ) {
+                    iterator.setZ(reset_point.getZ() + z );
+                    Block sel = middle.getWorld().getBlockAt(iterator);
+                    selectedBlocks.add(sel);
+                }
+                iterator.setZ(reset_point.getZ());
+            }
+            iterator.setY(reset_point.getY());
+        }
+
+        return selectedBlocks;
+    }
+
 	
 	public String trimHorseName(String str) {
 		
@@ -272,6 +396,7 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 		//System.out.println(name);
 		String finishedname = trimHorseName(name);
 		h.setCustomName(finishedname + "'s Horse");
+		h.setCustomNameVisible(true);
 	}
 	
 	public void nameCustomHorse(Player player, AbstractHorse h) {
@@ -279,7 +404,16 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 		//System.out.println(name);
 		String finishedname = trimHorseName(name);
 		h.setCustomName(finishedname + "'s Horse");
+		h.setCustomNameVisible(true);
 	}	
+	
+	@EventHandler
+	public void worldChange(PlayerChangedWorldEvent e) {
+		List<Entity> count = e.getFrom().getLivingEntities().stream().filter(d -> d instanceof Horse && e.getPlayer() == ((Horse)d).getOwner()).collect(Collectors.toList());
+		List<Entity> count1 = e.getFrom().getLivingEntities().stream().filter(d -> d instanceof AbstractHorse && e.getPlayer() == ((Horse)d).getOwner()).collect(Collectors.toList());
+		count.forEach(entity -> entity.remove());
+		count1.forEach(entity -> entity.remove());
+	}
 	
 	@EventHandler
 	public void RideHorse(VehicleEnterEvent e) {
@@ -298,6 +432,7 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 				} else {
 					e.setCancelled(true);
 					p.sendMessage(ChatColor.RED + "You do not own this Horse!");
+					return;
 				}
 				} 
 		if (h instanceof AbstractHorse) {
@@ -312,10 +447,57 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 					} else {
 						e.setCancelled(true);
 						p.sendMessage(ChatColor.RED + "You do not own this Horse!");
+						return;
 					}
 			}
 		}
 				}
+		if (h.getType().equals(EntityType.SKELETON_HORSE)) {
+			if (!(h.getCustomName().equals(null))) {
+				String name = h.getCustomName();
+				String pass1[] = name.split("'");
+				String newhorsename = pass1[0];
+				newhorsename.replaceAll("\\s+", "");
+				if (newhorsename.equalsIgnoreCase(p.getName())) {
+					
+				} else {
+					e.setCancelled(true);
+					p.sendMessage(ChatColor.RED + "You do not own this Horse!");
+					return;
+				}
+		}
+		}
+		
+		if (h.getType().equals(EntityType.ZOMBIE_HORSE)) {
+			if (!(h.getCustomName().equals(null))) {
+				String name = h.getCustomName();
+				String pass1[] = name.split("'");
+				String newhorsename = pass1[0];
+				newhorsename.replaceAll("\\s+", "");
+				if (newhorsename.equalsIgnoreCase(p.getName())) {
+					
+				} else {
+					e.setCancelled(true);
+					p.sendMessage(ChatColor.RED + "You do not own this Horse!");
+					return;
+				}
+		}
+		}
+		
+		if (!(h.getCustomName().equals(null))) {
+			String name = h.getCustomName();
+			String pass1[] = name.split("'");
+			String newhorsename = pass1[0];
+			newhorsename.replaceAll("\\s+", "");
+			if (newhorsename.equalsIgnoreCase(p.getName())) {
+				
+			} else {
+				e.setCancelled(true);
+				p.sendMessage(ChatColor.RED + "You do not own this Horse!");
+				return;
+			}
+	}
+		
 			}
 		}
 	}
@@ -326,16 +508,13 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 
 		if (e.getInventory() instanceof HorseInventory) {
 			e.setCancelled(true);
-			e.getPlayer().sendMessage(ChatColor.RED + "You cannot open horses inventories that are generated by the /horse command!");
 			return;
 		}
 		
-		Player player = (Player) e.getPlayer();
 		if (e.getInventory().getHolder() instanceof Horse) {
 			Horse horse = (Horse) e.getInventory().getHolder();
 		if (horse.getCustomName()!= null) {
 			e.setCancelled(true);
-			player.sendMessage(ChatColor.RED + "You cannot open horses inventories that are generated by the /horse command!");
 		}
 		}
 
@@ -343,7 +522,6 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 			AbstractHorse horse = (AbstractHorse) e.getInventory().getHolder();
 			if (horse.getCustomName() != null) {
 				e.setCancelled(true);
-				player.sendMessage(ChatColor.RED + "You cannot open horses inventories that are generated by the /horse command!");
 			}
 		}
 		
@@ -351,7 +529,6 @@ public class HorseSpawn extends JavaPlugin implements Listener{
 			AbstractHorse horse = (AbstractHorse) e.getInventory().getHolder();
 			if (horse.getCustomName() != null) {
 				e.setCancelled(true);
-				player.sendMessage(ChatColor.RED + "You cannot open horses inventories that are generated by the /horse command!");
 			}
 		}
 	}
