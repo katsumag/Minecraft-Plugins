@@ -6,8 +6,6 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import Utils.CustomItem;
-
 public class Enchants extends Enchantment implements Listener {
 
 	Main plugin;
