@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -39,23 +38,32 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import com.snowgears.grapplinghook.api.HookAPI;
+import com.snowgears.grapplinghook.api.*;
 //TODO Sort out the Health enchantment Event
 //TODO Armour effects.
-//TODO FIX ARMOUR SET CREATION. PLEASE
 public class main extends JavaPlugin implements Listener{
 	
-	Plugin plugin = Bukkit.getPluginManager().getPlugin("Custom Items");
+	Plugin plugin = Bukkit.getPluginManager().getPlugin("CustomItems");
 	
+	@Override
 	public void onEnable(){
 		PluginDescriptionFile pdfFile = getDescription();
 		Logger logger = getLogger();
 		logger.info(pdfFile.getName() + " has been enabled! ");
 		getServer().getPluginManager().registerEvents(this, this);
+		getServer().getPluginManager().registerEvents(new EarthArmour(this), this);
+		getServer().getPluginManager().registerEvents(new AirArmour(this), this);
+		getServer().getPluginManager().registerEvents(new FireArmour(this), this);
+		getServer().getPluginManager().registerEvents(new WaterArmour(this), this);
+		Plugin[] plugins = Bukkit.getServer().getPluginManager().getPlugins();
+		for (Plugin plugin: plugins) {
+			getLogger().info(plugin.getName());
+		}
 		LoadEnchantments();
 		loadRecipes();
 	}
 	
+	@Override
 	@SuppressWarnings({ "unchecked", "unlikely-arg-type" })
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = getDescription();
@@ -148,7 +156,7 @@ public class main extends JavaPlugin implements Listener{
 	}
 	
 	public void loadRecipes() {
-		List<ItemStack> emeraldArmour = CustomItem.nameArmourSet(CustomItem.getArmourSet(Material.LEATHER_BOOTS, Material.LEATHER_CHESTPLATE, Material.LEATHER_HELMET, Material.LEATHER_LEGGINGS, Color.GREEN), "Emerald");
+		List<ItemStack> emeraldArmour = EmeraldArmour.getEmeraldArmour();
 		List<ItemStack> fireArmour = FireArmour.getFireArmour();
 		List<ItemStack> waterArmour = WaterArmour.getWaterArmour();
 		List<ItemStack> earthArmour = EarthArmour.getEarthArmour();
@@ -190,6 +198,7 @@ public class main extends JavaPlugin implements Listener{
 		ItemMeta grass2meta = grass2.getItemMeta();
 		grass2meta.setDisplayName("Ultimate Grass");
 		grass2meta.setLore(Arrays.asList("Used to make Earth Armour!"));
+		grass2.setItemMeta(grass2meta);
 		
 		ItemStack air1 = new ItemStack(Material.FEATHER);
 		ItemMeta air1meta = air1.getItemMeta();
@@ -389,8 +398,8 @@ public class main extends JavaPlugin implements Listener{
 				if (e.getBow().getItemMeta().getDisplayName().equals("Teleportation Bow")) {
 					Entity arrow = e.getProjectile();
 		            
-		            arrow.setMetadata("TPBowOwner", new FixedMetadataValue(this.plugin, e.getEntity().getName()));
-		            arrow.setMetadata("TPBow", new FixedMetadataValue(this.plugin, "TPBow"));	            
+		            arrow.setMetadata("TPBowOwner", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("CustomItems"), e.getEntity().getName()));
+		            arrow.setMetadata("TPBow", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("CustomItems"), "TPBow"));	            
 				}
 			}
 		}

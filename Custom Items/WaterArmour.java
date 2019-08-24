@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -13,14 +14,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class WaterArmour extends main implements Listener{
+public class WaterArmour implements Listener{
 
 	public List<Player> waterList = new ArrayList<>();
 	public HashMap<Player, Integer> waterCount = new HashMap<>();
 	public List<ItemStack> waterArmour = getWaterArmour();
+	
+	Plugin plugin;
+	
+	public WaterArmour(Plugin main) {
+		this.plugin = main;
+	}
 	
 	public static List<ItemStack> getWaterArmour(){
 		
@@ -31,7 +40,13 @@ public class WaterArmour extends main implements Listener{
 		ItemStack WaterBoots = CustomItem.customItem(new ItemStack(Material.LEATHER_BOOTS), "Water Boots");
 		WaterBoots.addUnsafeEnchantment(Enchantment.DEPTH_STRIDER, 2);
 		ItemStack waterChestPlate = CustomItem.customItem(new ItemStack(Material.LEATHER_CHESTPLATE), "Water Chestplate");
+		LeatherArmorMeta chestM = (LeatherArmorMeta) waterChestPlate.getItemMeta();
+		chestM.setColor(Color.BLUE);
+		waterChestPlate.setItemMeta(chestM);
 		ItemStack waterLeggings = CustomItem.customItem(new ItemStack(Material.LEATHER_LEGGINGS), "Water Leggings");
+		LeatherArmorMeta bootL = (LeatherArmorMeta) waterLeggings.getItemMeta();
+		bootL.setColor(Color.BLUE);
+		waterLeggings.setItemMeta(bootL);
 		waterArmour.add(waterHelmet);
 		waterArmour.add(waterChestPlate);
 		waterArmour.add(waterLeggings);
@@ -57,10 +72,9 @@ public class WaterArmour extends main implements Listener{
 			if (item == null || item.getType() == Material.AIR) {
 				//do nothing
 			} else {
-				
 				//check against every item in waterArmour
 				for (ItemStack a: waterArmour) {
-					if (item == a) {
+					if (item.isSimilar(a)) { //problem here
 						waterCount.put(p, waterCount.get(p) + 1);
 					}
 				}
@@ -86,10 +100,39 @@ public class WaterArmour extends main implements Listener{
 	    if (m == Material.STATIONARY_WATER || m == Material.WATER) {
 	        // player is in water
 	    	if (waterList.contains(e.getPlayer())) {
-	    		e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 1, 1));
-	    		e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 1, 1));
+	    		if (! e.getPlayer().hasPotionEffect(PotionEffectType.NIGHT_VISION) && ! e.getPlayer().hasPotionEffect(PotionEffectType.WATER_BREATHING)) {
+	    			e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 40, 2), true);
+	    			e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 40, 2), true);
+	    		}
 	    	}
 	    }
 	}
+	
+	public boolean isSimilar(ItemStack first,ItemStack second){
+
+        boolean similar = false;
+
+        if(first == null || second == null){
+            return similar;
+        }
+
+        boolean sameTypeId = (first.getTypeId() == second.getTypeId());
+        boolean sameDurability = (first.getDurability() == second.getDurability());
+        boolean sameAmount = (first.getAmount() == second.getAmount());
+        boolean sameHasItemMeta = (first.hasItemMeta() == second.hasItemMeta());
+        boolean sameEnchantments = (first.getEnchantments().equals(second.getEnchantments()));
+        boolean sameItemMeta = true;
+
+        if(sameHasItemMeta) {
+            sameItemMeta = Bukkit.getItemFactory().equals(first.getItemMeta(), second.getItemMeta());
+        }
+
+        if(sameTypeId && sameDurability && sameAmount && sameHasItemMeta && sameEnchantments && sameItemMeta){
+            similar = true;
+        }
+
+        return similar;
+
+    }
 	
 }

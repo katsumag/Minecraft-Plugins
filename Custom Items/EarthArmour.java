@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,13 +13,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
-public class EarthArmour extends main implements Listener{
+public class EarthArmour implements Listener{
 
 	public List<ItemStack> earthArmour = getEarthArmour();
 	public List<Player> earthList = new ArrayList<>();
 	public HashMap<Player, Integer> earthCount = new HashMap<>();
 	public HashMap<Player, Double> Health = new HashMap<>();
+	
+	Plugin plugin;
+	
+	public EarthArmour(Plugin main) {
+		this.plugin = main;
+	}
 	
 	public static List<ItemStack> getEarthArmour(){
 		
@@ -59,10 +67,11 @@ public class EarthArmour extends main implements Listener{
 				
 				//check against every item in earthArmour
 				for (ItemStack a: earthArmour) {
-					if (item == a) {
+					if (isSimilar(item, a)) {
 						earthCount.put(p, earthCount.get(p) + 1);
+					}else {
 					}
-				}
+				} 
 				
 			}
 		}
@@ -89,5 +98,33 @@ public class EarthArmour extends main implements Listener{
 		}
 		
 	}
+	
+	public boolean isSimilar(ItemStack first,ItemStack second){
+
+        boolean similar = false;
+
+        if(first == null || second == null){
+            return similar;
+        }
+
+        boolean sameTypeId = (first.getTypeId() == second.getTypeId());
+        boolean sameDurability = (first.getDurability() == second.getDurability());
+        boolean sameAmount = (first.getAmount() == second.getAmount());
+        boolean sameHasItemMeta = (first.hasItemMeta() == second.hasItemMeta());
+        boolean sameEnchantments = (first.getEnchantments().equals(second.getEnchantments()));
+        boolean sameItemMeta = true;
+
+        if(sameHasItemMeta) {
+            sameItemMeta = Bukkit.getItemFactory().equals(first.getItemMeta(), second.getItemMeta());
+        }
+
+        if(sameTypeId && sameDurability && sameAmount && sameHasItemMeta && sameEnchantments && sameItemMeta){
+            similar = true;
+        }
+
+        return similar;
+
+    }
+
 	
 }
