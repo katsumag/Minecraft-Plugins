@@ -38,6 +38,9 @@ public class dropOnDeath extends JavaPlugin implements Listener{
 			second = rand.nextInt(36);
 		}
 		
+		e.getEntity().getWorld().dropItemNaturally(e.getEntity().getLocation(), e.getEntity().getInventory().getItem(first));
+		e.getEntity().getWorld().dropItemNaturally(e.getEntity().getLocation(), e.getEntity().getInventory().getItem(second));
+		
 		e.getEntity().getInventory().clear(first);
 		e.getEntity().getInventory().clear(second);
 		
