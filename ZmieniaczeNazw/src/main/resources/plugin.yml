@@ -1,0 +1,7 @@
+name: ZmieniaczeNazw
+version: ${project.version}
+main: io.github.katsumag.zmieniaczenazw.ZmieniaczeNazw
+api-version: 1.13
+commands:
+  zmieniacz:
+    description: Zmieniacze Nazw

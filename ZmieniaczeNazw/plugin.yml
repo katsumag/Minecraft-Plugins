@@ -1,0 +1,6 @@
+name: ZmieniaczeNazw
+main: io.github.katsumag.zmieniaczenazw.ZmieniaczeNazw
+version: 1.0
+commands:
+  zmieniacz:
+    description: Zmieniacze Nazw
